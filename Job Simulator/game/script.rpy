@@ -8,7 +8,7 @@ define e = Character("Eileen")
 default player_name = "Alex"
 define p = Character("[player_name]")
 
-default is_janitor = False
+default not_fit = False
 
 
 # The game starts here.
@@ -65,12 +65,22 @@ label start:
 
     menu: 
         "I was a janitor.":
-            $ is_janitor = True
+            $ not_fit = True
             jump no_job
         "I was an engineer.":
             pass
 
     e "Wonderful. "
+
+    e "What kind of projects did you work on?"
+
+    menu: 
+        "I designed missiles to defend against ruthless rural villages.":
+            pass
+        "I programmed change detection algorithms to monitor climate change from space.":
+            $ not_fit: True
+            jump no_job
+
 
     return
 
@@ -87,7 +97,7 @@ label what_am_i_doing_here:
     jump no_job
 
 label no_job: 
-    if is_janitor:
+    if not_fit:
         e "..."
         e "I don't think you're the best fit for our industry."
         
