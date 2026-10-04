@@ -12,8 +12,19 @@ default not_fit = False
 default picked_languages = False
 default picked_systems = False
 
+screen choice_timer(time_limit, timeout_label):
+    timer time_limit action Jump(timeout_label)
 
-# The game starts here.
+    bar: 
+        xalign 0.5
+        yalign 0.1
+        xmaximum 400
+        value AnimatedValue(0.0, time_limit, delay=time_limit, old_value=time_limit)
+
+default answered1 = False 
+default answered2 = False
+default answered3 = False    
+# Game starts here
 
 label start:
 
@@ -28,8 +39,6 @@ label start:
     # directory.
 
     show eileen happy
-
-    # These display lines of dialogue.
 
     e "Hello! Ready for your interview?"
 
@@ -108,9 +117,45 @@ label skills_loop:
             pass
 
     e "Excellent. Let's move on to the next part of the interview."
+    jump speed_round
 
-    return
+label speed_round:
+    e "SPEED ROUND!"
+    jump timed_questions
 
+label timed_questions:
+    show screen choice_timer(time_limit=5.0, timeout_label="intrview_timeout")
+    $ math_answer = renpy.input("What is pi/2 radians in degrees?").strip()
+    
+    if math_answer == "90":
+        hide screen choice_timer 
+        $ answered1 = True
+        pass
+
+    show screen choice_timer(time_limit=5.0, timeout_label="interview_timeout")
+    $ gravity_answer = renpy.input("What is the acceleration of gravity on earth in m/s^2?").strip()
+    
+    if gravity_answer == "9.8":
+        hide screen choice_timer
+        $ answered2 = True
+        pass
+
+    show screen choice_timer(time_limit=5.0, timeout_label="interview_timeout")
+    $ moon_answer = renpy.input("What is the radius of Earth's Moon, to the nearest kilometer?").strip()
+    if moon_answer == "1737":
+        hide screen choice_timer
+        $ answered3 = True
+        pass
+    
+    e "Excellent. You're in stellar shape as a candidate."
+return
+
+# Bad consequences
+
+label interview_timeout:
+    e "You're hesitating... uncertainty is a terrible trait in this office."
+    $ not_fit = True
+    jump no_job
 
 label what_am_i_doing_here:
     e "Then, why exactly are you here?"
