@@ -77,7 +77,7 @@ label start:
     e "What kind of projects did you work on?"
 
     menu: 
-        "I designed missiles to defend against ruthless rural villages.":
+        "I designed missiles and aerial defense technologies.":
             jump skills
         "I programmed change detection algorithms to monitor climate change from space.":
             $ not_fit: True
