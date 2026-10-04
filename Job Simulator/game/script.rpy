@@ -9,6 +9,8 @@ default player_name = "Alex"
 define p = Character("[player_name]")
 
 default not_fit = False
+default picked_languages = False
+default picked_systems = False
 
 
 # The game starts here.
@@ -76,13 +78,39 @@ label start:
 
     menu: 
         "I designed missiles to defend against ruthless rural villages.":
-            pass
+            jump skills
         "I programmed change detection algorithms to monitor climate change from space.":
             $ not_fit: True
             jump no_job
 
+label skills:
+    e "And what skills did you apply to this project?"
+
+label skills_loop:
+    if picked_languages or picked_systems:
+        e "Anything else?"
+
+    menu:
+
+        "Python, Ada, and C++. " if not picked_languages:
+            $ picked_languages = True
+            jump skills_loop
+
+        "Evil systems engineering and evil computer-aided design." if not picked_systems:
+            $ picked_systems = True 
+            jump skills_loop
+
+        "Empathy and compassion.":
+            $ not_fit = True
+            jump no_job
+
+        "That's all." if picked_languages or picked_systems:
+            pass
+
+    e "Excellent. Let's move on to the next part of the interview."
 
     return
+
 
 label what_am_i_doing_here:
     e "Then, why exactly are you here?"
@@ -100,6 +128,7 @@ label no_job:
     if not_fit:
         e "..."
         e "I don't think you're the best fit for our industry."
+        e "We try to priotitize candidates who are ultimately and indubitably morally corrupt."
         
     "You didn't get the job. Better luck next time."
     return
