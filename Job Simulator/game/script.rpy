@@ -16,6 +16,11 @@ default evil_points = 0
 default worked_in_HR = False
 default wrong = False
 
+transform big_and_bottom: 
+    zoom 1.5
+    xalign 0.5
+    yalign 1.0
+
 screen choice_timer(time_limit, timeout_label):
     timer time_limit action Jump(timeout_label)
 
@@ -42,7 +47,7 @@ label start:
     # replace it by adding a file named "eileen happy.png" to the images
     # directory.
 
-    show eileen happy
+    show eileen happy at big_and_bottom
 
     e "Hello! Ready for your interview?"
 
@@ -52,7 +57,7 @@ label start:
         "No.":
             jump what_am_i_doing_here
 
-    show eileen talking
+    show eileen talking at big_and_bottom
 
     e "Now, let me take a look at your resume."
 
@@ -60,15 +65,15 @@ label start:
 
     $ player_name = renpy.input("What is your name?", length=50).strip()
 
-    show eileen happy
+    show eileen happy at big_and_bottom
 
     e "Great. I'm Eileen. I'll be your interviewer today."
 
-    show eileen resume 
+    show eileen resume at big_and_bottom
 
     e "..."
 
-    show eileen thinking
+    show eileen thinking at big_and_bottom
 
     e "Here you are. You're interviewing for the role of \"Destruction Intern,\" correct?"
 
@@ -78,17 +83,17 @@ label start:
         "Not quite.":
             jump what_am_i_doing_here
 
-    show eileen resume 
+    show eileen resume at big_and_bottom
 
     e "Let's see. \"Experience\" ... Line cook ... Dog Walker ... "
 
-    show eileen pleased
+    show eileen pleased at big_and_bottom
 
     e "Wow - you interned for our rival, Evil Inc. !"
 
     e "Seeing as our interests are pretty similar. I'd like to ask you a few questions."
 
-    show eileen talking
+    show eileen talking at big_and_bottom
 
     e "What was your primary role at Evil, Inc.?"
 
@@ -108,11 +113,11 @@ label start:
             pass
 
     
-    show eileen happy 
+    show eileen happy at big_and_bottom
 
     e "Wonderful. "
 
-    show eileen talking
+    show eileen talking at big_and_bottom
 
     e "What kind of projects did you work on?"
 
@@ -137,7 +142,7 @@ label skills:
     e "And what skills did you apply to this project?"
 
 label skills_loop:
-    show eileen happy
+    show eileen happy at big_and_bottom
     if picked_languages or picked_systems or picked_greed:
         e "Anything else?"
 
@@ -169,7 +174,7 @@ label skills_loop:
     jump speed_round
 
 label speed_round:
-    show eileen speed
+    show eileen speed at big_and_bottom
     e "SPEED ROUND!"
     jump timed_questions
 
@@ -209,12 +214,12 @@ label timed_questions:
         $ wrong = True
         jump no_job
 
-    show eileen happy
+    show eileen happy at big_and_bottom
     e "Excellent. You're in stellar shape as a candidate."
     jump scenarios
 
 label scenarios:
-    show eileen talking
+    show eileen talking at big_and_bottom
     e "I'd like to give you a few situations and see what you'd do."
 
     e "Scenario 1: You're walking down the street and witness a woman's purse being stolen. What do you do?"
@@ -223,7 +228,7 @@ label scenarios:
             $ not_fit = True
             jump no_job
         "Break out into song to motivate passers by to help recover the purse.":
-            show eileen confused
+            show eileen confused at big_and_bottom
             e "...Sure."
             $ evil_points += 15
             pass
@@ -231,7 +236,7 @@ label scenarios:
             $ evil_points += 10
             pass
     
-    show eileen happy
+    show eileen happy at big_and_bottom
     e "Nice. Scenario 2: Someone at your birthday party is allergic to the cake you ordered for everyone. What's your plan?"
     menu:
         "Have them sit and watch everyone else eat cake.":
@@ -241,12 +246,12 @@ label scenarios:
             $ not_fit = True
             jump no_job
         "Throw the cake away and yell at them for it being \"their fault\"":
-            show eileen pleased
+            show eileen pleased at big_and_bottom
             e "Wow. These are seriously evil intentions."
             $ evil_points += 20
             pass
 
-    show eileen thinking
+    show eileen thinking at big_and_bottom
     e "Last one - Scenario 3. Your mega expensive super-yacht is sinking, and you must choose who to save."
     menu:
         "The captain.":
@@ -270,13 +275,13 @@ label scenarios:
 # Bad consequences
 
 label interview_timeout:
-    show eileen disappointed
+    show eileen disappointed at big_and_bottom
     e "You're hesitating... uncertainty is a terrible trait in this office."
     $ not_fit = True
     jump no_job
 
 label what_am_i_doing_here:
-    show eileen confused
+    show eileen confused at big_and_bottom
     e "Then, why exactly are you here?"
 
     menu:
@@ -289,7 +294,7 @@ label what_am_i_doing_here:
     jump no_job
 
 label no_job: 
-    show eileen disappointed
+    show eileen disappointed at big_and_bottom
     if wrong:
         e "That wasn't right."
     if not_fit:
@@ -304,7 +309,7 @@ label no_job:
 # Good consequences
 
 label got_the_job:
-    show eileen pleased
+    show eileen pleased at big_and_bottom
     e "Well, [player_name], I've got to give it to you."
     e "This has been a great interview, and accoring to our state of the art monitoring systems, you scored [evil_points] evil points!"
     if worked_in_HR:
@@ -312,7 +317,7 @@ label got_the_job:
         pass
     e "You should be proud."
     e "If you'll accept the offer..."
-    show eileen handshake
+    show eileen handshake at big_and_bottom
     e "Welcome to Obliterate Corp. !"
 
     return
