@@ -11,6 +11,8 @@ define p = Character("[player_name]")
 default not_fit = False
 default picked_languages = False
 default picked_systems = False
+default evil_points = 0 
+default worked_in_HR = False
 
 screen choice_timer(time_limit, timeout_label):
     timer time_limit action Jump(timeout_label)
@@ -32,7 +34,7 @@ label start:
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
-    scene bg room
+    scene office
 
     # This shows a character sprite. A placeholder is used, but you can
     # replace it by adding a file named "eileen happy.png" to the images
@@ -79,14 +81,33 @@ label start:
             $ not_fit = True
             jump no_job
         "I was an engineer.":
+            $ evil_points += 10
             pass
+        "I was a developer.":
+            $ evil_points += 5
+            pass
+        "I worked in HR.":
+            $ worked_in_HR = True
+            $ evil_points += 25
+            pass
+
 
     e "Wonderful. "
 
     e "What kind of projects did you work on?"
 
     menu: 
-        "I designed missiles and aerial defense technologies.":
+        "I designed weapons and defense technologies.":
+            $ evil_points += 5
+            jump skills
+        "I stole candy from babies.":
+            $ evil_points += 10
+            jump skills
+        "I was a field agent in the tying-peoples-shoelaces-together division.":
+            $ evil_points += 5
+            jump skills
+        "I scheduled a lot of meetings that could have been emails.":
+            $ evil_points += 10
             jump skills
         "I programmed change detection algorithms to monitor climate change from space.":
             $ not_fit: True
@@ -146,9 +167,55 @@ label timed_questions:
         hide screen choice_timer
         $ answered3 = True
         pass
-    
+
     e "Excellent. You're in stellar shape as a candidate."
-return
+    jump scenarios
+
+label scenarios:
+    e "I'd like to give you a few situations and see what you'd do."
+
+    e "Scenario 1: You're walking down the street and witness a woman's purse being stolen. What do you do?"
+    menu:
+        "Run after the thief.":
+            $ not_fit = True
+            jump no_job
+        "Break out into song to motivate passers by to help recover the purse.":
+            e "...Sure."
+            $ evil_points += 15
+            pass
+        "Walk up to the woman and ask for her watch too.":
+            $ evil_points += 10
+            pass
+    
+    e "Nice. Scenario 2: Someone at your birthday party is allergic to the cake you ordered for everyone. What's your plan?"
+    menu:
+        "Have them sit and watch everyone else eat cake.":
+            $ evil_points += 5
+            pass
+        "Reluctantly drive to the store and buy some cupcakes.":
+            $ not_fit = True
+            jump no_job
+        "Throw the cake away and yell at them for it being \"their fault\"":
+            e "Wow. These are seriously evil intentions."
+            $ evil_points += 20
+            pass
+
+    e "Last one - Scenario 3. Your mega expensive super-yacht is sinking, and you must choose who to save."
+    menu:
+        "The captain.":
+            $ not_fit = True
+            jump no_job
+        "My sister's handsome boyfriend.":
+            $ not_fit = True
+            jump no_job
+        "The $500,000 in cash I had onboard \"just in case.\"":
+            $ evil_points += 10
+            pass
+        "Save nothing and swim away myself.":
+            $ evil_points += 15
+            e "A truly badass and unreasonably selfish decision. Admirable."
+            pass
+
 
 # Bad consequences
 
@@ -174,6 +241,21 @@ label no_job:
         e "..."
         e "I don't think you're the best fit for our industry."
         e "We try to priotitize candidates who are ultimately and indubitably morally corrupt."
+        e "Let's end it here."
         
     "You didn't get the job. Better luck next time."
+    return
+
+# Good consequences
+
+label got_the_job:
+    e "Well, [player_name], I've got to give it to you."
+    e "This has been a great interview, and accoring to our state of the art monitoring systems, you scored [evil_points] evil points!"
+    if worked_in_HR:
+        e "And if I recall corretly - you worked in HR. That's a pretty big evil indicator."
+        pass
+    e "You should be proud."
+    e "If you'll accept the offer..."
+    e "Welcome to Obliterate Corp. !"
+
     return
