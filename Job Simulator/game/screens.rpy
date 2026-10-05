@@ -355,7 +355,8 @@ screen main_menu():
     ## This ensures that any other menu screen is replaced.
     tag menu
 
-    add gui.main_menu_background
+    add Solid("#fff")
+    add gui.main_menu_background xysize (config.screen_width, config.screen_height) fit "contain" align (0.5, 0.5)
 
     ## This empty frame darkens the main menu.
     frame:
@@ -387,14 +388,13 @@ style main_menu_frame:
     xsize 420
     yfill True
 
-    background "gui/overlay/main_menu.png"
+    background None
 
 style main_menu_vbox:
-    xalign 1.0
-    xoffset -30
+    xalign 0.5
     xmaximum 1200
-    yalign 1.0
-    yoffset -30
+    yalign 0.0
+    yoffset 40
 
 style main_menu_text:
     properties gui.text_properties("main_menu", accent=True)
