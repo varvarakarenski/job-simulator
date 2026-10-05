@@ -9,6 +9,7 @@ This project gives you a chance to experience a job interview for your dream com
 
 # Credits:
 All images were created by Varvara Karenski.
+Free music from Pixabay by andriih and ikoliks_aj.
 
 **Note:** 
 The main companies, Obliterate Corp. and Evil Inc., are wholly fictional with zero references, perspective or sentiment toward real-life events or industries.
