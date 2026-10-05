@@ -7,6 +7,9 @@ This project gives you a chance to experience a job interview for your dream com
 - Physics: Basic physics
 - Astronomy: Fundamental lunar knowledge
 
+# Credits:
+All images were created by Varvara Karenski.
+
 **Note:** 
 The main companies, Obliterate Corp. and Evil Inc., are wholly fictional with zero references, perspective or sentiment toward real-life events or industries.
 

@@ -11,8 +11,10 @@ define p = Character("[player_name]")
 default not_fit = False
 default picked_languages = False
 default picked_systems = False
+default picked_greed = False
 default evil_points = 0 
 default worked_in_HR = False
+default wrong = False
 
 screen choice_timer(time_limit, timeout_label):
     timer time_limit action Jump(timeout_label)
@@ -50,15 +52,23 @@ label start:
         "No.":
             jump what_am_i_doing_here
 
+    show eileen talking
+
     e "Now, let me take a look at your resume."
 
     e "What was your name again?"
 
     $ player_name = renpy.input("What is your name?", length=50).strip()
 
+    show eileen happy
+
     e "Great. I'm Eileen. I'll be your interviewer today."
 
+    show eileen resume 
+
     e "..."
+
+    show eileen thinking
 
     e "Here you are. You're interviewing for the role of \"Destruction Intern,\" correct?"
 
@@ -68,11 +78,17 @@ label start:
         "Not quite.":
             jump what_am_i_doing_here
 
+    show eileen resume 
+
     e "Let's see. \"Experience\" ... Line cook ... Dog Walker ... "
+
+    show eileen pleased
 
     e "Wow - you interned for our rival, Evil Inc. !"
 
     e "Seeing as our interests are pretty similar. I'd like to ask you a few questions."
+
+    show eileen talking
 
     e "What was your primary role at Evil, Inc.?"
 
@@ -91,8 +107,12 @@ label start:
             $ evil_points += 25
             pass
 
+    
+    show eileen happy 
 
     e "Wonderful. "
+
+    show eileen talking
 
     e "What kind of projects did you work on?"
 
@@ -117,17 +137,25 @@ label skills:
     e "And what skills did you apply to this project?"
 
 label skills_loop:
-    if picked_languages or picked_systems:
+    show eileen happy
+    if picked_languages or picked_systems or picked_greed:
         e "Anything else?"
 
     menu:
 
         "Python, Ada, and C++. " if not picked_languages:
             $ picked_languages = True
+            $ evil_points += 5
             jump skills_loop
 
         "Evil systems engineering and evil computer-aided design." if not picked_systems:
             $ picked_systems = True 
+            $ evil_points += 5
+            jump skills_loop
+
+        "Greed and corruption." if not picked_greed:
+            $ picked_greed = True 
+            $ evil_points += 10
             jump skills_loop
 
         "Empathy and compassion.":
@@ -141,6 +169,7 @@ label skills_loop:
     jump speed_round
 
 label speed_round:
+    show eileen speed
     e "SPEED ROUND!"
     jump timed_questions
 
@@ -152,6 +181,10 @@ label timed_questions:
         hide screen choice_timer 
         $ answered1 = True
         pass
+    else: 
+        hide screen choice_timer
+        $ wrong = True
+        jump no_job
 
     show screen choice_timer(time_limit=5.0, timeout_label="interview_timeout")
     $ gravity_answer = renpy.input("What is the acceleration of gravity on earth in m/s^2?").strip()
@@ -160,6 +193,10 @@ label timed_questions:
         hide screen choice_timer
         $ answered2 = True
         pass
+    else: 
+        hide screen choice_timer
+        $ wrong = True
+        jump no_job
 
     show screen choice_timer(time_limit=5.0, timeout_label="interview_timeout")
     $ moon_answer = renpy.input("What is the radius of Earth's Moon, to the nearest kilometer?").strip()
@@ -167,11 +204,17 @@ label timed_questions:
         hide screen choice_timer
         $ answered3 = True
         pass
+    else: 
+        hide screen choice_timer
+        $ wrong = True
+        jump no_job
 
+    show eileen happy
     e "Excellent. You're in stellar shape as a candidate."
     jump scenarios
 
 label scenarios:
+    show eileen talking
     e "I'd like to give you a few situations and see what you'd do."
 
     e "Scenario 1: You're walking down the street and witness a woman's purse being stolen. What do you do?"
@@ -180,6 +223,7 @@ label scenarios:
             $ not_fit = True
             jump no_job
         "Break out into song to motivate passers by to help recover the purse.":
+            show eileen confused
             e "...Sure."
             $ evil_points += 15
             pass
@@ -187,6 +231,7 @@ label scenarios:
             $ evil_points += 10
             pass
     
+    show eileen happy
     e "Nice. Scenario 2: Someone at your birthday party is allergic to the cake you ordered for everyone. What's your plan?"
     menu:
         "Have them sit and watch everyone else eat cake.":
@@ -196,10 +241,12 @@ label scenarios:
             $ not_fit = True
             jump no_job
         "Throw the cake away and yell at them for it being \"their fault\"":
+            show eileen pleased
             e "Wow. These are seriously evil intentions."
             $ evil_points += 20
             pass
 
+    show eileen thinking
     e "Last one - Scenario 3. Your mega expensive super-yacht is sinking, and you must choose who to save."
     menu:
         "The captain.":
@@ -215,16 +262,21 @@ label scenarios:
             $ evil_points += 15
             e "A truly badass and unreasonably selfish decision. Admirable."
             pass
+    
+    e "That's all for today."
+    jump got_the_job
 
 
 # Bad consequences
 
 label interview_timeout:
+    show eileen disappointed
     e "You're hesitating... uncertainty is a terrible trait in this office."
     $ not_fit = True
     jump no_job
 
 label what_am_i_doing_here:
+    show eileen confused
     e "Then, why exactly are you here?"
 
     menu:
@@ -237,6 +289,9 @@ label what_am_i_doing_here:
     jump no_job
 
 label no_job: 
+    show eileen disappointed
+    if wrong:
+        e "That wasn't right."
     if not_fit:
         e "..."
         e "I don't think you're the best fit for our industry."
@@ -249,6 +304,7 @@ label no_job:
 # Good consequences
 
 label got_the_job:
+    show eileen pleased
     e "Well, [player_name], I've got to give it to you."
     e "This has been a great interview, and accoring to our state of the art monitoring systems, you scored [evil_points] evil points!"
     if worked_in_HR:
@@ -256,6 +312,7 @@ label got_the_job:
         pass
     e "You should be proud."
     e "If you'll accept the offer..."
+    show eileen handshake
     e "Welcome to Obliterate Corp. !"
 
     return
